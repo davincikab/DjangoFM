@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+<form class="form-horizontal " action="{% url 'home' %}" method="get" >
+  {% csrf_token %}
+  <!-- <div class="for-group">
+    <label for="buffer">Distance</label>
+    <input class="form-control" type="text" name="buffer" value="">
+  </div>
+  <div class="for-group">
+    <label for="buffer">Distance</label>
+    <select class="form-control" name="">
+      <option value="">Water Point</option>
+      <option value="">Street Light</option>
+      <option value="">Indigenous Tree</option>
+    </select>
+  </div> -->
+    {{ form|crispy }}
+  <div class="for-group">
+    <input class="form-control" id="sq" type="Submit" name="buffer" value="Submit" placeholder="">
+  </div>
+
+</form>
+{{ data }}

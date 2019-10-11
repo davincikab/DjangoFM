@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!-- Styling used -->
+    <link rel="stylesheet" href="./css/leaflet.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="./css/leaflet.label.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="./css/leaflet-search.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="./css/leaflet-routing-machine.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="./css/bootstrap.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="./css/master.css" media="screen" title="no title" charset="utf-8">
+    
+    <!--Scripts used  -->
+    <script type="text/javascript" src="js/leaflet.js"></script>
+    <script type="text/javascript" src="js/leaflet.label.js"></script>
+    <script type="text/javascript" src="js/leaflet.ajax.min.js"></script>
+    <script type="text/javascript" src="js/leaflet-routing-machine.js"></script>
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/leaflet-search.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src='js/turf.min.js'></script>
+
+
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 5%;
+        width: 100%;
+      }
+
+    </style>
+</head>
+<body>
+<div id='map'></div>
+<script>
+
+////////////////
+	var map = L.map('map').setView([-15,125],12);
+  //         MAPBOX TILE LAYERS
+          var mapAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                       'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+
+          var mapUrl ='https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+          var tile = L.tileLayer(mapUrl,{id:'mapbox.streets',attribution:mapAttr}),
+              street = L.tileLayer(mapUrl,{id:'mapbox.light',attribution:mapAttr});
+
+          tile.addTo(map);
+
+  var geojsonMarkerOptions = {
+  			radius:5,
+  			fillColor: "red",
+  			color: "",
+  			weight: 1,
+  			opacity: 1,
+  			fillOpacity: 0.8
+  		};
+
+  var line = turf.lineString([[-83, 30], [-84, 36], [-78, 41]]);
+  var options = {units: 'miles'};
+
+  var along = turf.along(line, 200, options);
+
+  var pts = L.geoJson(line,{}).addTo(map);
+  var pts = L.geoJson(along,{
+      pointToLayer:function(feature,latlng){
+      return L.marker(latlng).bindPopup("This is a Point");
+  }}).addTo(map);
+
+  // AREA
+  var polygon = turf.polygon([[[125, -15], [113, -22], [154, -27], [144, -15], [125, -15]]]);
+  var area = turf.area(polygon);
+
+  var poly = L.geoJson(polygon,{
+    style:function(feature, layer){
+      return{
+        fillColor:'red',
+        color:''
+      };
+    }
+  }).bindPopup("Area of the red polygon is: "+area).addTo(map);
+  console.log("Area of the red polygon is: "+area);
+  console.log("Zoom level: "+map.getZoom())
+
+// Bounding box
+  var bboxx = turf.bbox(line);
+  var bpoly = turf.bboxPolygon(bboxx);
+
+  var bb = L.geoJson(bpoly,{style:function(feature,layer){return{fillColor:'blue',color:''};}}).addTo(map);
+
+// Center and Center of Mass
+  var cent = turf.centerOfMass(polygon);
+
+  // var ctr = L.geoJson(cent,{
+  //   pointToLayer:function(feature,latlng){
+  //     return L.circleMarker(latlng,{geojsonMarkerOptions}).bindPopup("Centre of the red polygon");
+  //   }
+  // }).addTo(map);
+
+ // Convex Hull
+  var hull = turf.convex(polygon);
+  // var ctr = L.geoJson(hull).addTo(map);
+
+  // Difference, dissolve, intersection
+  var polygon1 = turf.polygon([[[125, -15], [101, -21], [154, -20], [144, -12], [125, -15]]]);
+  var diff = turf.difference(polygon1,polygon);
+  var inte = turf.intersect(polygon1,polygon);
+
+  // var df = L.geoJson(diff,{style:function(feature,layer){return {fillColor:'black',color:'blue'}}}).addTo(map);
+
+
+// LineStrings
+  var lof = turf.lineString([ [101, -21], [154, -20], [144, -18]]);
+  var off = turf.lineOffset(lof,100,{units:'kilometers'});
+  var df = L.geoJson(off,{style:function(feature,layer){return {color:'green'}}}).addTo(map);
+
+// Union,voronoi
+var poly_union = turf.union(polygon,polygon1);
+var bbpx_poly = turf.bbox(poly_union);
+var rdptts = turf.randomPoint(100,{bbox:bbpx_poly});
+
+var vor = turf.voronoi(rdptts,{bbox:bbpx_poly});
+var vgj = L.geoJson([vor,poly_union,rdptts],{style:function(feature,layer){return{fillColor:'khaki',color:'black'};},
+pointToLayer:function(feature,latlng){
+  return L.circleMarker(latlng,(geojsonMarkerOptions)).bindPopup("Point used in voronoi generation");
+}});
+vgj.addTo(map);
+
+// Feature Conversion
+var pts = turf.featureCollection([
+  turf.point([101,-20]),
+  turf.point([144,-16])
+]);
+
+var comb = turf.combine(pts);
+var flt = turf.flatten(pts);
+
+var exp = turf.explode(poly_union);
+var ltp = turf.lineToPolygon(line);
+
+var lyr = L.geoJson(exp,{}).addTo(map);
+var lyr1 = L.geoJson(comb,{}).addTo(map);
+var lyr2 = L.geoJson(ltp).addTo(map);
+
+var baselayer = {
+  'MapBox Tile':tile,
+  'MapBox Street':street
+};
+
+var overlays ={
+
+  'Explode':lyr,
+  'Flatten':lyr1,
+  'Voronoi':vgj,
+  'LineToPolygon':lyr2
+};
+
+L.control.layers(baselayer,overlays).addTo(map);
+
+map.fitBounds(vgj.getBounds());
+</script>
+</body>
+</html>

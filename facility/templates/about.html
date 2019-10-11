@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content%}
+<form class="form-horizontal col-md-6  offset-2" action="{% url 'room-spatial-search' %}" method="get" >
+  <!-- <div class="for-group">
+    <label for="buffer">Distance</label>
+    <input class="form-control" type="text" name="buffer" value="">
+  </div>
+  <div class="for-group">
+    <label for="buffer">Distance</label>
+    <select class="form-control" name="">
+      <option value="">Water Point</option>
+      <option value="">Street Light</option>
+      <option value="">Indigenous Tree</option>
+    </select>
+  </div>
+  <div class="for-group">
+    <input class="form-control" type="Submit" name="buffer" value="Submit" placeholder="">
+  </div> -->
+    {% csrf_token %}
+    {{ form|crispy }}
+  <div class="for-group">
+    <input class="form-control" type="Submit" name="buffer" value="Submit" placeholder="">
+  </div>
+</form>
+
+{{ data }}
+{% endblock %}

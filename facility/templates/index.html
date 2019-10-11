@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid row ui" id ="ui">
+ <div class="col-md-8 col-sm-8 col-xs-12" id="map" ></div>
+ <div class="col-md-4 col-sm-4 col-sm-4 col-xs-12 analysis_form" id="analysis">
+   <form class="form-horizontal " id="form" action="{% url 'ajax_form' %}" method="get" >
+     {% csrf_token %}
+     <input class="form-control" type="text" name="location" value="" placeholder="Location">
+     <input class="form-control" type="text" name="distance" value="" placeholder="distance">
+     <!-- <div class="for-group">
+       <label for="buffer">Distance</label>
+       <input class="form-control" type="text" name="buffer" value="">
+     </div>
+     <div class="for-group">
+       <label for="buffer">Distance</label>
+       <select class="form-control" name="">
+         <option value="">Water Point</option>
+         <option value="">Street Light</option>
+         <option value="">Indigenous Tree</option>
+       </select>
+     </div> -->
+       <!-- {{ form|crispy }} -->
+
+     <div class="for-group">
+       <input class="form-control" id="sq" type="Submit" name="buffer" value="Submit" placeholder="">
+     </div>
+
+   </form>
+   {{ data }}
+ </div>
+
+ <!-- Media -->
+ <div class="control col-md-4 col-sm-4 col-sm-4 col-xs-12">
+   <div class="pic" id="pic">
+     <h4>Text Description</h4>
+     <section id='section_pic'>
+       <p>Dedan Kimathi University of Technology (or DeKUT) is a public, coeducational technological university in Nyeri, Kenya.
+         It is located 6 km from Nyeri along the Nyeri – Mweiga highway. The college land spans about 1,000 acres (4.0 km2)
+         consisting of 350 acres (1.4 km2) of natural forest,350 acres (1.4 km2) of mature coffee and 300 acres (1.2 km2) of open space for expansion.
+         ports include rugby, football, hockey, basketball and volleyball teams. <a href="https://en.wikipedia.org/wiki/Dedan_Kimathi_University_of_Technology">Wikipedia</a>
+       </p>
+     </section>
+   </div>
+
+   <div class="vid container-fluid" id="vid">
+     <h4>Multimedia Description</h4>
+     <section id="section_vid">
+       <div id="demo" class="carousel slide" data-ride="carousel">
+                     <!-- Indicators -->
+           <ul class="carousel-indicators">
+             <li data-target="#demo" data-slide-to="0" class="active"></li>
+             <li data-target="#demo" data-slide-to="1"></li>
+             <li data-target="#demo" data-slide-to="2"></li>
+           </ul>
+
+           <!-- The slideshow -->
+           <div class="carousel-inner">
+             <div class="carousel-item active">
+               <img src="{% static 'images/Kimathi.jpg' %}" alt="Los Angeles">
+             </div>
+             <div class="carousel-item">
+               <img src="{% static 'images/gallery-hotel-drawing.jpg' %}" alt="Chicago">
+             </div>
+             <div class="carousel-item">
+               <img src="{% static 'images/gallery-agrotech-drawing.jpg' %}" alt="New York">
+             </div>
+           </div>
+
+           <!-- Left and right controls -->
+           <a class="carousel-control-prev" href="#demo" data-slide="prev">
+             <span class="carousel-control-prev-icon"></span>
+           </a>
+           <a class="carousel-control-next" href="#demo" data-slide="next">
+             <span class="carousel-control-next-icon"></span>
+           </a>
+
+          </div>
+     </section>
+   </div>
+
+ </div>
+</div>
+
+
+{% endblock %}

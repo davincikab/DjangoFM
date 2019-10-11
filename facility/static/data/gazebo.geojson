@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"name": "gazebo",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1, "name": "Gazibo 15", "sockets": "2", "capacity": "7", "status": "2" }, "geometry": { "type": "Point", "coordinates": [ 36.958730524668262, -0.392509059611119 ] } },
+{ "type": "Feature", "properties": { "id": 2, "name": "Gazibo 16", "sockets": "2", "capacity": "7", "status": "2" }, "geometry": { "type": "Point", "coordinates": [ 36.958794293978109, -0.392505371632564 ] } },
+{ "type": "Feature", "properties": { "id": 3, "name": "Gazibo 17", "sockets": "2", "capacity": "7", "status": "3" }, "geometry": { "type": "Point", "coordinates": [ 36.958840893972791, -0.39250538308661 ] } },
+{ "type": "Feature", "properties": { "id": 4, "name": "Gazibo 18", "sockets": "2", "capacity": "7", "status": "3" }, "geometry": { "type": "Point", "coordinates": [ 36.958899756227702, -0.392509101207834 ] } },
+{ "type": "Feature", "properties": { "id": 6, "name": "Gazibo 19", "sockets": "2", "capacity": "7", "status": "1" }, "geometry": { "type": "Point", "coordinates": [ 36.958954940735133, -0.39250788022009 ] } },
+{ "type": "Feature", "properties": { "id": 7, "name": "Gazibo 20", "sockets": "2", "capacity": "7", "status": "1" }, "geometry": { "type": "Point", "coordinates": [ 36.959024840435333, -0.39250913195102 ] } },
+{ "type": "Feature", "properties": { "id": 8, "name": "Gazibo 21", "sockets": "2", "capacity": "7", "status": "4" }, "geometry": { "type": "Point", "coordinates": [ 36.959099644803317, -0.392512853989527 ] } }
+]
+}

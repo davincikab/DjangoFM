@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+<!-- The form -->
+{% block content %}
+<div class="container my-5 ">
+  <div class="row">
+    <div class="col-md-10">
+    	<form class="form-horizontal card " method="post" action="">
+        {% csrf_token %}
+    		{{ form|crispy }}
+    		<button typo|title e="submit" class="btn btn-success">Update</button>
+    	</form>
+
+    </div><!-- .col -->
+  </div><!-- .row -->
+</div><!-- .container -->
+{% endblock %}

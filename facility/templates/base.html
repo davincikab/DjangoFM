@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kimathi Online</title>
+
+<!-- Styling used -->
+<link rel="stylesheet" href="{% static 'css/leaflet.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/leaflet.label.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/leaflet-search.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/leaflet-routing-machine.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/master.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/dynamic.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/easy-button.css' %}" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'css/leaflet.awesome-markers.css' %}">
+<link rel="stylesheet" href="{% static 'css/MarkerCluster.css' %}">
+<link rel="stylesheet" href="{% static 'css/MarkerCluster.Default.css' %}">
+<style media="screen">
+.collapsible{
+      text-align: left;
+      font-size:15px;
+      width: 100%;
+    }
+
+    .active, .collapsible:hover{
+      color:black;
+    }
+
+    .collapsible:after{
+      content: '\002B';
+      color:white;
+      float:right;
+
+    }
+
+    .active:after{
+      content:'\2212';
+    }
+
+    .content{
+      padding:0 10px;
+      max-height:0;
+      overflow: hidden;
+      transition:max-height 0.2s ease-out;
+      background-color:#f1f1f1;
+    }
+</style>
+</head>
+  <body>
+    <nav class="navbar navbar-expand-lg ">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand" href="{% url 'home' %}">Facility Management</a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'three-d' %}">3D Map</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Reports
+            </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'home' %}">Lighting</a>
+                <a class="dropdown-item" href="{% url 'home' %}">Drainage</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'home' %}">Space Management</a>
+                <a class="dropdown-item" href="{% url 'home' %}">Security</a>
+                <a class="dropdown-item" href="{% url 'home' %}"></a>
+              </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'room-spatial-search' %}">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% static #">Story</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% static #">Sign In</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% static #">Sign Up</a>
+          </li>
+        </ul>
+        <form class="form-inline ">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <img src="{% static " class="img-thumbnail username rounded-circle" alt="Username" >
+        </form>
+      </div>
+    </nav>
+
+
+    {% block content %}
+    {% endblock %}
+ <!--Scripts used  -->
+ <!--  DATA SCRIPTS -->
+ <script type="text/javascript" src="{% static 'data/Boundary.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/Building.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/Coffee_plantation.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/Footbal_pitch.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/Footpath.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/Forest.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/Maize_plantation.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/Roads.js' %}"></script>
+ <script type="text/javascript" src="{% static 'data/sciencepark.js' %}"></script>
+
+<!-- PLUGINS USED -->
+<script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/leaflet.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/leaflet.label.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/leaflet.ajax.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/leaflet-routing-machine.js' %}"></script>
+<script src="{% static 'js/Control.Geocoder.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/leaflet-search.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/leaflet-indoor.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/easy-button.js' %}"></script>
+<script src="{% static 'js/leaflet.markercluster-src.js' %}"></script>
+<script src="{% static 'js/leaflet.awesome-markers.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>
