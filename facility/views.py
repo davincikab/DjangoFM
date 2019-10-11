@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import FeatureBuilding, FeatureStreetLights,FeatureWaterPoint
+from .models import *
 from django.http import HttpResponse
 from django.core.serializers import serialize
 from django.template.loader import render_to_string
@@ -7,6 +7,7 @@ from django.contrib.gis.geos import GEOSGeometry, Point
 from django.contrib.gis.measure import D
 from django.db.models import Q
 from .forms import *
+import json
 
 # Create your views here.
 def home(request):
@@ -19,9 +20,23 @@ def building(request):
     build = serialize('geojson', FeatureBuilding.objects.all())
     return HttpResponse(build)
 
-def street_light(request):
+def data_layers(request):
+    seats = serialize('geojson',FeatureFieldSeats.objects.all())
+    stpts = serialize('geojson',FeatureSittingPoints.objects.all())
+    scp_blocks = serialize('geojson',FeatureScpblocks.objects.all())
+    scp_roads = serialize('geojson', FeatureScpRoad.objects.all())
+    forest_cover = serialize('geojson', FeatureForest.objects.all())
+    water_point = serialize('geojson', FeatureWaterPoint.objects.all())
+    coffee = serialize('geojson', FeatureCoffeePlantation.objects.all())
+    road_data = serialize('geojson', Road.objects.all())
     street = serialize('geojson', FeatureStreetLights.objects.all())
-    return HttpResponse(street)
+    play = serialize('geojson', FeatureFootballPitch.objects.all())
+
+    response = {'seats':seats,'stpts':stpts,'scp_blocks':scp_blocks,'scp_road':scp_roads,
+            'forest_cover':forest_cover,'water_point':water_point,'coffee':coffee,
+            'road':road_data,'street':street,'play':play}
+    # response = [seats,stpts,scp_blocks]
+    return HttpResponse(json.dumps(response))
 
 def water_point(request):
     water_point = serialize('geojson', FeatureWaterPoint.objects.all())
