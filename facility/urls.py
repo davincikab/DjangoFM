@@ -9,9 +9,8 @@ urlpatterns = [
     path('threed/',kimathi_three_d, name= 'three-d'),
 
     path('build/', building, name='build'),
-    path('street/',street_light, name= 'street'),
-    path('water/',water_point, name= 'water'),
-
+    path('data/',data_layers, name= 'data'),
+    
     # Water views CRUD
     path('water_update/<int:gid>/',water_light_update, name='water-update'),
     path('water_delete/<int:gid>/',water_light_delete, name='water-delete'),
