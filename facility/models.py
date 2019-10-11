@@ -90,7 +90,6 @@ class FeatureCoffeePlantation(models.Model):
         managed = False
         db_table = 'feature_coffee_plantation'
 
-
 class FeatureCulverts(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.BigIntegerField(blank=True, null=True)
@@ -151,24 +150,24 @@ class FeatureForest(models.Model):
         db_table = 'feature_forest'
 
 
-class FeatureFps(models.Model):
+class Road(models.Model):
     gid = models.AutoField(primary_key=True)
     objectid = models.BigIntegerField(blank=True, null=True)
-    shape_leng = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    lntype = models.BigIntegerField(blank=True, null=True)
-    leftln_fid = models.BigIntegerField(blank=True, null=True)
-    rightln_fi = models.BigIntegerField(blank=True, null=True)
     surface = models.CharField(max_length=254, blank=True, null=True)
-    walk_speed = models.SmallIntegerField(blank=True, null=True)
-    cycle_spee = models.SmallIntegerField(blank=True, null=True)
-    distance = models.FloatField(blank=True, null=True)
-    way = models.SmallIntegerField(blank=True, null=True)
+    walk_speed = models.BigIntegerField(blank=True, null=True)
+    cycle_spee = models.BigIntegerField(blank=True, null=True)
+    distance = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    way = models.BigIntegerField(blank=True, null=True)
     type = models.CharField(max_length=254, blank=True, null=True)
+    id = models.BigIntegerField(blank=True, null=True)
+    drive_spee = models.BigIntegerField(blank=True, null=True)
+    source = models.SmallIntegerField(blank=True, null=True)
+    target = models.SmallIntegerField(blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'feature_fps'
+        db_table = 'road'
 
 
 class FeatureGates(models.Model):
