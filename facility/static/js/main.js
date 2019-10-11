@@ -640,7 +640,9 @@ L.easyButton('<strong>A</strong>',function(){
 }).addTo(map);
 
 
-$('#form').on('submit', function(){
+$('#form').on('submit', function(e){
+  e.preventDefault();
+  
   let form = $(this);
   // form.serialize(),
   $.ajax({
