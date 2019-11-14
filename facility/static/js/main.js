@@ -21,54 +21,42 @@ var boundary = L.geoJson([Boundary],{
   style:function(feature, layer){
     return{
       color:'black',
-      width:1
+      width:1,
+      dashArray:1,
     };
   }
 }).addTo(map);
 
-var sciencep = L.geoJson([sciencepark],{
-  style:function(feature,layer){
-    return{
-      fillColor:'#ffffff10',
-      color:'',
-      fillOpacity:0.1
-    };
-  },
-  onEachFeature:function(feature,layer){layer.on('click',zoomTo);
-    layer.bindPopup("<h6>Name: "+feature.properties.names+"</h6>");
-  }
-}).addTo(map);
-
-var coffee = L.geoJson([coffee],{
+var coffee = L.geoJson(null,{
   style:function( feature,layer){
     return{
     color:'',fillOpacity:0.6,
-    fillColor:"brown",
+    fillColor:"#efa910",
     Opacity:1
   };
   },
-  onEachFeature:function(feature,layer){layer.on('click',zoomTo);
+  onEachFeature:function(feature,layer){
+      layer.on('click',zoomTo);
       layer.bindPopup("<h4>Name: "+ feature.properties.names+"</h4>");
   }
 }).addTo(map);
 
 function getRoadColor(feature){
-  return feature.properties.Type ="Footpath"?'#FF0000':'#FF0000';
+  console.log(feature.properties.type == 'FootPath');
+  return (feature.properties.type != "FootPath")?'red':'brown';
 }
 
 var roads = L.geoJson(null,{
-  style:function(feature, layer){
+  style:function(feature){
     return{
       color:getRoadColor(feature),
       lineWidth:0.5,
       Opacity:0.6
-    };
+    }
   }
 }).addTo(map);
 
-$.getJSON('/static/data/rds.geojson').done(function(data){roads.addData(data)});
-
-var forest = L.geoJson([forest],{
+var forest = L.geoJson(null,{
   style:function(feature,layer){
     return{
       fillColor:'green',
@@ -76,7 +64,8 @@ var forest = L.geoJson([forest],{
       blur:3
     };
   },
-  onEachFeature:function(feature,layer){layer.on('click',zoomTo);
+  onEachFeature:function(feature,layer){
+    layer.on('click',zoomTo);
     layer.bindPopup("<h6>Name: "+feature.properties.names+"</h6>");
     // layer.bindLabel(feature.properties.names.toString());
 
@@ -107,6 +96,8 @@ var building = L.geoJson(null,{
 
 $.getJSON("http://127.0.0.1:8000/build/").done(function(data){
   building.addData(data);
+
+
 }).fail(function(error){alert(error)});
 
 function zoomTo(e){
@@ -115,7 +106,7 @@ function zoomTo(e){
   let layer = e.target;
   map.setView(layer.getBounds().getCenter(),21);
 }
-var pitch = L.geoJson([football],{
+var pitch = L.geoJson(null,{
   style:function(feature,layer){
     return{
       fillColor:'LawnGreen',
@@ -123,14 +114,16 @@ var pitch = L.geoJson([football],{
     };
   },
   onEachFeature:function(feature,layer){
+    layer.bindPopup("<h6>Name:</h6>");
+
     layer.on('click',function(e){
-      console.log(e);
+      layer.openPopup();
     });
-    layer.bindPopup("<h6>Name: "+feature.properties.names+"</h6>");
+
   }
 }).addTo(map);
 
-var maizep = L.geoJson([maize],{
+var maizep = L.geoJson(null,{
   style:function( feature,layer){
     return{
     fillColor:"green",
@@ -159,54 +152,54 @@ var scp_block = L.geoJson(null,{
 }).addTo(map);
 
 let dt;
-
-$.getJSON("/static/data/scp_blocks.geojson").done(function(data){
-  scp_block.addData(data);
-  dt = Array.from(new Set(data.features.map(k=> k.properties.use))).map(
-      id=>{
-        return {use:id, color:data.features.find(k=> k.properties.use  === id).properties.color}
-      });
-    // Legend for various uses
-
-    var scp_use_control = L.control({position:'bottomleft'});
-
-    scp_use_control.onAdd = function(map){
-      var div = L.DomUtil.create('div', 'legend');
-      let button = L.DomUtil.create('button','btn collapsible');
-      button.innerHTML='Proposed Block Use';
-
-      let content = L.DomUtil.create('div','content');
-      div.appendChild(button);
-      // div.innerHTML += '<p>Proposed Block Use</p>';
-      let properties_control =  [... new Set(scp_block.toGeoJSON().features.map(k=> k.properties.use))]
-      var label = [];
-
-      for (let tp of dt) {
-        content.innerHTML+='<i style="background:'
-            +tp.color+ '">&nbsp;&nbsp;</i>&nbsp;&nbsp; '
-            +tp.use+'<br>';
-
-      }
-
-      div.appendChild(content);
-
-      button.addEventListener('click', function(e){
-        e.stopPropagation();
-        button.classList.toggle('active');
-
-    		if(content.style.maxHeight){
-    					content.style.maxHeight = null;
-    			}else{
-    				content.style.maxHeight = content.scrollHeight+"px";
-    			}
-      });
-
-      return div;
-    }
-
-    map.addControl(scp_use_control);
-
-}).fail(function(e){alert(e)})
+//
+// $.getJSON("/static/data/scp_blocks.geojson").done(function(data){
+//   scp_block.addData(data);
+//   dt = Array.from(new Set(data.features.map(k=> k.properties.use))).map(
+//       id=>{
+//         return {use:id, color:data.features.find(k=> k.properties.use  === id).properties.color}
+//       });
+//     // Legend for various uses
+//
+//     var scp_use_control = L.control({position:'bottomleft'});
+//
+//     scp_use_control.onAdd = function(map){
+//       var div = L.DomUtil.create('div', 'legend');
+//       let button = L.DomUtil.create('button','btn collapsible');
+//       button.innerHTML='Proposed Block Use';
+//
+//       let content = L.DomUtil.create('div','content');
+//       div.appendChild(button);
+//       // div.innerHTML += '<p>Proposed Block Use</p>';
+//       let properties_control =  [... new Set(scp_block.toGeoJSON().features.map(k=> k.properties.use))]
+//       var label = [];
+//
+//       for (let tp of dt) {
+//         content.innerHTML+='<i style="background:'
+//             +tp.color+ '">&nbsp;&nbsp;</i>&nbsp;&nbsp; '
+//             +tp.use+'<br>';
+//
+//       }
+//
+//       div.appendChild(content);
+//
+//       button.addEventListener('click', function(e){
+//         e.stopPropagation();
+//         button.classList.toggle('active');
+//
+//     		if(content.style.maxHeight){
+//     					content.style.maxHeight = null;
+//     			}else{
+//     				content.style.maxHeight = content.scrollHeight+"px";
+//     			}
+//       });
+//
+//       return div;
+//     }
+//
+//     map.addControl(scp_use_control);
+//
+// }).fail(function(e){alert(e)})
 
 var scp_road = L.geoJson(null,{
   onEachFeature:function(feature, layer){
@@ -216,15 +209,10 @@ var scp_road = L.geoJson(null,{
     return{
       color:'red',
       fillOpacity:0.6,
-
       lineJoin:'round'
     }
   }
 }).addTo(map);
-
-$.getJSON("/static/data/sc_road.geojson").done(function(data){
-  scp_road.addData(data);
-}).fail(function(error){alert(e)});
 
 var redMarker = L.AwesomeMarkers.icon({
   icon: 'bolt',
@@ -241,12 +229,8 @@ var street_light = L.geoJson(null,{
   pointToLayer: function(geoJsonPoint, latlng){
     return L.marker(latlng,{icon:redMarker});
   }
-}).addTo(map);
+});
 
-$.getJSON("http://127.0.0.1:8000/street/").done(function(data){
-  street_light.addData(data);
-  marker_cluster.addLayer(street_light);
-}).fail(function(error){alert(error)});
 
 var water_point = L.geoJson(null,{
   onEachFeature:function(feature, layer){
@@ -255,19 +239,13 @@ var water_point = L.geoJson(null,{
   },
   pointToLayer:function(geoJsonPoint, latLng){
     return L.marker(latLng,{icon: L.AwesomeMarkers.icon({
-      icon: 'tint',
+      icon: '',
       markerColor:'blue',
       prefix:'fa'
     })
   });
   }
-}).addTo(map);
-
-$.getJSON("/static/data/water_point.geojson").done(function(data){
-  water_point.addData(data);
-  marker_cluster.addLayers(water_point);
-
-}).fail(function(error){alert(e)});
+});
 
 var sittng_points = L.geoJson(null,{
   onEachFeature:function(feature, layer){
@@ -281,14 +259,34 @@ var sittng_points = L.geoJson(null,{
     })
   });
   }
-}).addTo(map);
+});
 
-$.getJSON("/static/data/stpts.geojson").done(function(data){
-  sittng_points.addData(data);
-}).fail(function(error){alert(e)});
+// $.getJSON("/static/data/stpts.geojson").done(function(data){
+//   sittng_points.addData(data);
+// }).fail(function(error){alert(e)});
 
 map.fitBounds(boundary.getBounds());
 
+$.getJSON('http://127.0.0.1:8000/data/')
+.done(function(data){
+
+  roads.addData(JSON.parse(data.road));
+  scp_block.addData(JSON.parse(data.scp_blocks));
+  scp_road.addData(JSON.parse(data.scp_road));
+  street_light.addData(JSON.parse(data['street']));
+  water_point.addData(JSON.parse(data['water_point']));
+  sittng_points.addData(JSON.parse(data['seats']));
+  forest.addData(JSON.parse(data['forest_cover']));
+  coffee.addData(JSON.parse(data['coffee']));
+  pitch.addData(JSON.parse(data['play']));
+
+  marker_cluster.addLayers(water_point);
+  marker_cluster.addLayer(street_light);
+  marker_cluster.addLayer(sittng_points);
+
+}).fail(function(errorxhr, errmsg){
+  console.log(errmsg+" Failed to load the data");
+});
     // BASEMAPAS objects
 var baselayer ={
  'Street Map':tile,
@@ -302,7 +300,6 @@ var overlays={
   'Playing Field':pitch,
   'Building':building,
   'Roads':roads,
-  'Science Park':sciencep,
   'Sciencepark Blocks':scp_block,
   'Sciencepark Road':scp_road
 };
@@ -351,7 +348,7 @@ L.easyButton('<img src="http://127.0.0.1:8000/static/images/locate.png" height="
    }
 }).addTo(map);
 // SEARCH ELEMENT USING LEAFLET-SEARCH
-var layers = new L.LayerGroup([building,coffee,pitch,maizep,sciencep]);
+var layers = new L.LayerGroup([building,coffee,pitch,maizep]);
 
 var controlSearch = new L.Control.Search({
      position:'topleft',
@@ -431,10 +428,8 @@ controlSearch.on('search:locationfound', function(e) {
 
 }
 }).on('search:collapsed', function(e) {
-    building.eachLayer(function(layer) {
-        layer.resetStyle();
-    });
-
+  e.layer.closePopup();
+  e.layer.setStyle({fillColor: 'grey', color: 'white'});
 });
 
 map.addControl( controlSearch );
@@ -464,10 +459,9 @@ $.getJSON("/static/data/gfloor.geojson").done(function(geoJSON) {
             fillOpacity: 1
             };
         }
-});
+}).addTo(map);
 
 indoorLayer.setLevel("0");
-// map.addLayer(indoorLayer);
 
 var levelControl = new L.Control.Level({
     level: "0",
@@ -477,6 +471,8 @@ var levelControl = new L.Control.Level({
 // Connect the level control to the indoor layer
 levelControl.addEventListener("levelchange", indoorLayer.setLevel, indoorLayer);
 levelControl.addTo(map);
+}).fail(function(err,xhr,errmsg){
+  console.log(e);
 });
 
 // Dealing with layer visibility on zoom
@@ -522,7 +518,7 @@ layer_visibility();
 //  map.addControl(router);
 //
 //  L.Routing.errorControl(router).addTo(map);
-
+var selectedPoint;
 var startmarker = L.marker([-0.39746, 36.96484], {
   draggable:true,
   icon:L.AwesomeMarkers.icon({
@@ -642,7 +638,7 @@ L.easyButton('<strong>A</strong>',function(){
 
 $('#form').on('submit', function(e){
   e.preventDefault();
-  
+
   let form = $(this);
   // form.serialize(),
   $.ajax({
