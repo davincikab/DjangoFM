@@ -2,7 +2,7 @@ body{
   margin:0;
   padding:0;
   font-family:Lucida,Times,sans-serif;
-  font-size:2vh;
+  font-size: 0.9em;
 
 }
 .container-fluid{
@@ -14,13 +14,11 @@ body{
 .navbar{
   background-color:green;
   width:100%;
-  height:auto;
-  padding:1%;
 }
 
 .navbar-brand {
   color: #ffffff;
-  font-size: 1.8em;
+  font-size: 1.3em;
 }
 
 .navbar-brand:hover{
@@ -29,8 +27,7 @@ body{
 
 .navbar-nav a{
   color:#ffffff;
-  font-size: 1.2em;
-  margin:0%;
+  font-size: 1.0em;
 }
 
 .navbar-nav a:hover{
@@ -155,4 +152,28 @@ section{
 
 .btn-analysis{
   width:12px;
+}
+
+.route-container{
+  height:35px;
+  width:35px;
+  border:2px solid grey;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: white !important;
+
+}
+.route-container >button{
+  margin:-8%;
+  color:black;
+  font-weight: bold;
+}
+
+.route-container >button:hover{
+  background-color: green;
+}
+
+route-form{
+  display: none;
+  padding: 1%;
 }

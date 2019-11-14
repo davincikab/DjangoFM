@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from PIL import Image
 
 class FeatureBins(models.Model):
     gid = models.AutoField(primary_key=True)
@@ -40,34 +41,76 @@ class FeatureBoundary(models.Model):
         managed = False
         db_table = 'feature_boundary'
 
-
 class FeatureBuilding(models.Model):
-    gid = models.AutoField(primary_key=True)
-    id = models.BigIntegerField(blank=True, null=True)
+    gid = models.IntegerField()
+    fid = models.IntegerField()
+    names = models.CharField(primary_key=True, max_length=254)
     name = models.CharField(max_length=254, blank=True, null=True)
-    id_1 = models.BigIntegerField(blank=True, null=True)
+    area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     height = models.BigIntegerField(blank=True, null=True)
-    window = models.SmallIntegerField(blank=True, null=True)
-    door = models.IntegerField(blank=True, null=True)
-    sockets = models.SmallIntegerField(blank=True, null=True)
+    window = models.BigIntegerField(blank=True, null=True)
+    door = models.BigIntegerField(blank=True, null=True)
+    sockets = models.BigIntegerField(blank=True, null=True)
     department = models.CharField(max_length=254, blank=True, null=True)
-    area = models.FloatField(blank=True, null=True)
     use = models.CharField(max_length=254, blank=True, null=True)
-    comm_port = models.IntegerField(blank=True, null=True)
-    capacity = models.SmallIntegerField(blank=True, null=True)
-    bulbqty = models.SmallIntegerField(blank=True, null=True)
-    tap = models.SmallIntegerField(blank=True, null=True)
+    comm_port = models.BigIntegerField(blank=True, null=True)
+    capacity = models.BigIntegerField(blank=True, null=True)
+    bulbqty = models.BigIntegerField(blank=True, null=True)
+    tap = models.BigIntegerField(blank=True, null=True)
     maintenace = models.CharField(max_length=254, blank=True, null=True)
-    sec_light = models.SmallIntegerField(blank=True, null=True)
-    level = models.SmallIntegerField(blank=True, null=True)
-    block = models.CharField(max_length=80, blank=True, null=True)
-    names = models.CharField(max_length=254, blank=True, null=True)
+    sec_light = models.BigIntegerField(blank=True, null=True)
+    level = models.BigIntegerField(blank=True, null=True)
+    block = models.CharField(max_length=254, blank=True, null=True)
+    image = models.ImageField(upload_to='building', default='all_rc.jpg', null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
+    def save(self,*args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.image.path)
+        if img.height >300 or img.width >300:
+            output_size = (300,300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
     class Meta:
         managed = False
-        db_table = 'feature_building'
+        db_table = 'building'
 
+
+# class FeatureBuilding(models.Model):
+#     gid = models.AutoField(primary_key=True)
+#     id = models.BigIntegerField(blank=True, null=True)
+#     name = models.CharField(max_length=254, blank=True, null=True)
+#     id_1 = models.BigIntegerField(blank=True, null=True)
+#     height = models.BigIntegerField(blank=True, null=True)
+#     window = models.SmallIntegerField(blank=True, null=True)
+#     door = models.IntegerField(blank=True, null=True)
+#     sockets = models.SmallIntegerField(blank=True, null=True)
+#     department = models.CharField(max_length=254, blank=True, null=True)
+#     area = models.FloatField(blank=True, null=True)
+#     use = models.CharField(max_length=254, blank=True, null=True)
+#     comm_port = models.IntegerField(blank=True, null=True)
+#     capacity = models.SmallIntegerField(blank=True, null=True)
+#     bulbqty = models.SmallIntegerField(blank=True, null=True)
+#     tap = models.SmallIntegerField(blank=True, null=True)
+#     maintenace = models.CharField(max_length=254, blank=True, null=True)
+#     sec_light = models.SmallIntegerField(blank=True, null=True)
+#     level = models.SmallIntegerField(blank=True, null=True)
+#     block = models.CharField(max_length=80, blank=True, null=True)
+#     names = models.CharField(max_length=254, blank=True, null=True)
+#     image = models.ImageField(upload_to='building', default='all_rc.jpg', null=True)
+#     geom = models.MultiPolygonField(blank=True, null=True)
+#
+#     def save(self,*args, **kwargs):
+#         super().save(*args, **kwargs)
+#         img = Image.open(self.image.path)
+#         if img.height >300 or img.width >300:
+#             output_size = (300,300)
+#             img.thumbnail(output_size)
+#             img.save(self.image.path)
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'feature_building'
 
 class FeatureBushes(models.Model):
     gid = models.AutoField(primary_key=True)
@@ -324,9 +367,9 @@ class FeatureScpRoad(models.Model):
 class FeatureScpblocks(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.IntegerField(blank=True, null=True)
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=15, blank=True, null=True)
     area_ha = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    use = models.CharField(max_length=50, blank=True, null=True)
+    use = models.CharField(max_length=15, blank=True, null=True)
     color = models.CharField(max_length=80, blank=True, null=True)
 
     geom = models.MultiPolygonField(blank=True, null=True)
@@ -408,3 +451,30 @@ class FeatureWaterPoint(models.Model):
     class Meta:
         managed = False
         db_table = 'feature_water_point'
+
+
+class Timetable(models.Model):
+    unit_code = models.CharField(max_length=15, blank=True, null=True)
+    department = models.CharField(db_column='Department', max_length=15, blank=True, null=True)  # Field name made lowercase.
+    unit_name = models.CharField(max_length=15, blank=True, null=True)
+    is_common = models.CharField(max_length=15, blank=True, null=True)
+    course = models.CharField(max_length=15, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    semester = models.IntegerField(blank=True, null=True)
+    student_count = models.CharField(max_length=15, blank=True, null=True)
+    lecturer = models.CharField(max_length=15, blank=True, null=True)
+    lecture_cellphone = models.CharField(max_length=15, blank=True, null=True)
+    lecture_hours = models.IntegerField(blank=True, null=True)
+    tutorial_hours = models.IntegerField(blank=True, null=True)
+    practical_hours = models.IntegerField(db_column='practical hours', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    is_field_practical = models.CharField(max_length=10, blank=True, null=True)
+    day_allocated = models.CharField(max_length=15, blank=True, null=True)
+    time_allocated = models.CharField(max_length=15, blank=True, null=True)
+    room_allocated = models.ForeignKey(FeatureBuilding, models.DO_NOTHING, db_column='room_allocated', related_name ='room_allocated', blank=True, null=True)
+    practical_time = models.CharField(max_length=8, blank=True, null=True)
+    practical_venue = models.CharField(max_length=15, blank=True, null=True)
+    practical_day = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'timetable'

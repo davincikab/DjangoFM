@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row m">
+    <!-- Filter usti -->
+    <div class="col-md-3" id="">
+      <select class="form-control" name="" id="usefilter">
+      </select>
+    </div>
+
+    <div class="col-md-3" id="all">
+      <div class="card">
+        <div class="card-body text-center">
+          <h5>Total Building</h5>
+          <h5>570</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3" id="blocks">
+      <div class="card">
+        <div class="card-body text-center">
+          <h5>Blocks</h5>
+          <h5>12</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" id="blocks">
+      <div class="card">
+        <div class="card-body text-center">
+          <h5>Blocks</h5>
+          <h5>12</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="col-md-6" id="roomUse">
+
+  </div>
+  <div class="col-md-6" id="utility">
+      <!--  -->
+  </div>
+  <div class="col-md-6" id="occupancy">
+      <!-- pie-chart  -->
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{% static 'js/highcharts.js' %}" ></script>
+  <script type="text/javascript" src="{% static 'js/dashboard.js' %}" ></script>
+{% endblock %}

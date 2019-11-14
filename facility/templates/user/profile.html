@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="continer-fluid">
+	<div class="row">
+		<div class="container col-md-6 offset-2 mt-5">
+			<div class="card py-4">
+				<div class="media">
+					<div class="media-body">
+						<div class="page-header">
+							<img src="{{ user.profile.image.url }}" class="rounded-circle" width="50" height="50">
+							<a class="account-heading ml-2">{{ user.username|title }}</a>
+							<!-- <small class="text-primary">{{ user.email }}</small> -->
+						</div>
+					</div>
+				</div>
+
+				<form class=""  role="form" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<fieldset class="form-group">
+						<legend class="border-bottom mb-4">Profile Info</legend>
+						{{ u_form | crispy }}
+						{{ p_form | crispy }}
+						{{ user.email }}<br>
+						{{ user.email }}
+					</fieldset>
+
+					<div class="form-group ">
+						<button class="btn btn-info " type="submit">Update</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="col-md-3 container-fluid mt-5">
+			<h4 class="">My Units</h4>
+			<ul class="list-group">
+				<!-- Iterate through the user posts -->
+
+				<li class="list-group-item"> Unit 1</li>
+				<li class="list-group-item"> Unit 2</li>
+				<li class="list-group-item"> Unit 3</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}

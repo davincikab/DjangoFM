@@ -7,6 +7,7 @@ class BuilldingForm(ModelForm):
     class Meta:
         model = FeatureBuilding
         exclude = ['geom']
+        widgets = {'maintenace':forms.Textarea}
 
 class WaterPointForm(ModelForm):
     class Meta:

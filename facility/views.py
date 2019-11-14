@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect,redirect, get_object_or_404
 from .models import *
 from django.http import HttpResponse
 from django.core.serializers import serialize
@@ -8,17 +8,30 @@ from django.contrib.gis.measure import D
 from django.db.models import Q
 from .forms import *
 import json
-
+from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
+
+@login_required
 def home(request):
     return render(request, 'index.html')
+@login_required
+def dashboard(request):
+    return render(request, 'dashboard_maintenance.html')
 
 def kimathi_three_d(request):
     return render(request, 'kimathi_3d/index.html')
 
 def building(request):
-    build = serialize('geojson', FeatureBuilding.objects.all())
+    # data = FeatureBuilding.objects.raw("SELECT * FROM building FULL OUTER JOIN timetable ON building.names = timetable.room_allocated;")
+    build = serialize('geojson', FeatureBuilding.objects.all().prefetch_related('room_allocated'))
     return HttpResponse(build)
+
+def related_data(request):
+    data = FeatureBuilding.objects.all().prefetch_related('room_allocated')
+    datar = [];
+    for datum in data:
+        datar.append({'name':datum.names,'related':serialize('json',datum.room_allocated.all())})
+    return HttpResponse(json.dumps(datar))
 
 def data_layers(request):
     seats = serialize('geojson',FeatureFieldSeats.objects.all())
@@ -51,20 +64,22 @@ def save_form_file(request, form, template_name):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return redirect('home')
-    return render(request, 'leaflet_form.html', {'form':form})
+            return HttpResponseRedirect('/')
+    return render(request, template_name, {'form':form})
 
 # look at render_to_string
+@login_required
 def building_update(request, gid):
     building = get_object_or_404(FeatureBuilding, gid=gid)
 
     if request.method == 'POST':
-        form = BuilldingForm(request.POST, instance=building)
+        form = BuilldingForm(request.POST, request.FILES, instance=building)
     else:
         form = BuilldingForm(instance=building)
 
-    return save_form_file(request, form, 'leaflet_form.html')
+    return save_form_file(request, form, 'building_form.html')
 
+@login_required
 def street_light_update(request, gid):
     street = get_object_or_404(FeatureStreetLights, gid=gid)
 
@@ -75,6 +90,7 @@ def street_light_update(request, gid):
 
     return save_form_file(request, form, 'leaflet_form.html')
 
+@login_required
 def water_light_update(request,gid):
     water = get_object_or_404(FeatureWaterPoint, gid=gid)
 
@@ -85,6 +101,7 @@ def water_light_update(request,gid):
 
     return save_form_file(request, form, 'leaflet_form.html')
 
+@login_required
 def water_light_delete(request, gid):
     water = get_object_or_404(FeatureWaterPoint,gid=gid)
 
@@ -130,7 +147,19 @@ def simple_ajax_form(request):
     if request.method == 'GET':
         distance = request.GET.get('distance')
         position = request.GET.get('position')
-        print(position)
-        pnt = Point(float(position.lat),float(position.lng), srid=4326)
+        data = position.split(',')
+        pnt = Point(float(data[0]),float(data[1]), srid=4326)
         output = serialize('geojson',FeatureWaterPoint.objects.filter(geom__distance_lt=(pnt, D(m=int(distance)))))
     return HttpResponse(output)
+
+def disaster_analysis(request):
+    pass
+
+def space_management(request):
+    pass
+
+def security_status(request):
+    pass
+
+def maintenace_reports(request):
+    pass

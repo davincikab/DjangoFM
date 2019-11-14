@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+<!-- The form -->
+{% block content %}
+<div class="container my-5 card">
+    <!-- <h5>BUILDING DATA </h5> -->
+    <div class="col-md-12">
+    	<form class="form-horizontal " method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2 class="text-center">Update the Data </h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-group">
+            {{ form.name|as_crispy_field  }}
+          </div>
+          <div class="input-group">
+            {{ form.height|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.window|as_crispy_field  }}
+          </div>
+          <div class="input-group">
+            {{ form.door|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.sockets|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.department|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.block|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.area |as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.use|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.image|as_crispy_field }}
+          </div>
+          <!-- name, height,window,door, sockets, department,area, use,comm_port,capacity,bulbqty,tapa,maintenace,level,block -->
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            {{ form.names|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.comm_port|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.capacity|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.bulbqty|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.tap|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.level|as_crispy_field }}
+          </div>
+          <div class="input-group">
+            {{ form.maintenace|as_crispy_field }}
+          </div>
+
+        </div>
+    		<button type="submit" class="btn btn-success">Update</button>
+        </div>
+    	</form>
+
+    </div><!-- .col -->
+  </div><!-- .row -->
+</div>
+{% endblock %}

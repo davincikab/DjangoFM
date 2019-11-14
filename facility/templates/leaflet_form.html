@@ -1,14 +1,19 @@
 {% extends "base.html" %}
+{% load leaflet_tags %}
 {% load crispy_forms_tags %}
 <!-- The form -->
+
+{% leaflet_js plugins="forms" %}
+{% leaflet_css plugins="forms" %}
+
 {% block content %}
 <div class="container my-5 ">
   <div class="row">
     <div class="col-md-10">
-    	<form class="form-horizontal card " method="post" action="">
+    	<form class="form-horizontal card " method="post" action="" enctype="multipart/form-data">
         {% csrf_token %}
-    		{{ form|crispy }}
-    		<button typo|title e="submit" class="btn btn-success">Update</button>
+    		 {{ form  }}
+    		<button type="submit" class="btn btn-success">Update</button>
     	</form>
 
     </div><!-- .col -->

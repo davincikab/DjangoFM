@@ -6,11 +6,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', home, name='home'),
+    path('dashboard/',dashboard, name='dashboard'),
     path('threed/',kimathi_three_d, name= 'three-d'),
 
     path('build/', building, name='build'),
     path('data/',data_layers, name= 'data'),
-    
+    path('related_data/', related_data, name='build_data'),
+
     # Water views CRUD
     path('water_update/<int:gid>/',water_light_update, name='water-update'),
     path('water_delete/<int:gid>/',water_light_delete, name='water-delete'),
